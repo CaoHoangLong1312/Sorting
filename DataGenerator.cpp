@@ -755,85 +755,85 @@ void writeOutputFile(const string &fileName, int arr[], int n) {
 
 void processSorting(const string &algorithm, int a[], int n, const string &outputParam) {
 	// Run many times
-	// comparisonCount = 0;
-	// double totalTime = 0;
-	// int iterations = 1000;
+	comparisonCount = 0;
+	double totalTime = 0;
+	int iterations = 10;
 
-	// int* temp = new int[n];
+	int* temp = new int[n];
 	
-	// for (int i = 0; i < iterations; i++) {
-	// 	for (int j = 0; j < n; j++) {
-	// 		temp[j] = a[j];
-	// 	}
+	for (int i = 0; i < iterations; i++) {
+		for (int j = 0; j < n; j++) {
+			temp[j] = a[j];
+		}
 
-	// 	clock_t start = clock();
-	// 	if (algorithm == "selection-sort") {
-	// 		selectionSort(temp, n);
-	// 	} else if (algorithm == "insertion-sort") {
-	// 		insertionSort(temp, n);
-	// 	} else if (algorithm == "binary-insertion-sort") {
-	// 		binaryInsertionSort(temp, n);
-	// 	} else if (algorithm == "bubble-sort") {
-	// 		bubbleSort(temp, n);
-	// 	} else if (algorithm == "shaker-sort") {
-	// 		shakerSort(temp, n);
-	// 	} else if (algorithm == "shell-sort") {
-	// 		shellSort(temp, n);
-	// 	} else if (algorithm == "heap-sort") {
-	// 		heapSort(temp, n);
-	// 	} else if (algorithm == "merge-sort") {
-	// 		mergeSort(temp, n);
-	// 	} else if (algorithm == "quick-sort") {
-	// 		quickSort(temp, 0, n - 1);
-	// 	} else if (algorithm == "counting-sort") {
-	// 		countingSort(temp, n);
-	// 	} else if (algorithm == "radix-sort") {
-	// 		radixSort(temp, n);
-	// 	} else if (algorithm == "flash-sort") {
-	// 		flashSort(temp, n);
-	// 	} else {
-	// 		cerr << "Error: Unsupported sorting algorithm!\n";
-	// 		delete[] temp;
-	// 		return;
-	// 	}
-	// 	clock_t end = clock();
-	// 	totalTime += getTime(start, end);
-	// }
-	// double elapsedTime = totalTime / iterations;
+		clock_t start = clock();
+		if (algorithm == "selection-sort") {
+			selectionSort(temp, n);
+		} else if (algorithm == "insertion-sort") {
+			insertionSort(temp, n);
+		} else if (algorithm == "binary-insertion-sort") {
+			binaryInsertionSort(temp, n);
+		} else if (algorithm == "bubble-sort") {
+			bubbleSort(temp, n);
+		} else if (algorithm == "shaker-sort") {
+			shakerSort(temp, n);
+		} else if (algorithm == "shell-sort") {
+			shellSort(temp, n);
+		} else if (algorithm == "heap-sort") {
+			heapSort(temp, n);
+		} else if (algorithm == "merge-sort") {
+			mergeSort(temp, n);
+		} else if (algorithm == "quick-sort") {
+			quickSort(temp, 0, n - 1);
+		} else if (algorithm == "counting-sort") {
+			countingSort(temp, n);
+		} else if (algorithm == "radix-sort") {
+			radixSort(temp, n);
+		} else if (algorithm == "flash-sort") {
+			flashSort(temp, n);
+		} else {
+			cerr << "Error: Unsupported sorting algorithm!\n";
+			delete[] temp;
+			return;
+		}
+		clock_t end = clock();
+		totalTime += getTime(start, end);
+	}
+	double elapsedTime = totalTime / iterations;
 
 	// Run one time
-	comparisonCount = 0;
-	clock_t start = clock();
-	if (algorithm == "selection-sort") {
-		selectionSort(a, n);
-	} else if (algorithm == "insertion-sort") {
-		insertionSort(a, n);
-	} else if (algorithm == "binary-insertion-sort") {
-		binaryInsertionSort(a, n);
-	} else if (algorithm == "bubble-sort") {
-		bubbleSort(a, n);
-	} else if (algorithm == "shaker-sort") {
-		shakerSort(a, n);
-	} else if (algorithm == "shell-sort") {
-		shellSort(a, n);
-	} else if (algorithm == "heap-sort") {
-		heapSort(a, n);
-	} else if (algorithm == "merge-sort") {
-		mergeSort(a, n);
-	} else if (algorithm == "quick-sort") {
-		quickSort(a, 0, n - 1);
-	} else if (algorithm == "counting-sort") {
-		countingSort(a, n);
-	} else if (algorithm == "radix-sort") {
-		radixSort(a, n);
-	} else if (algorithm == "flash-sort") {
-		flashSort(a, n);
-	} else {
-        cerr << "Error: Unsupported sorting algorithm!\n";
-        return;
-    }
-	clock_t end = clock();
-	double elapsedTime = getTime(start, end);
+	// comparisonCount = 0;
+	// clock_t start = clock();
+	// if (algorithm == "selection-sort") {
+	// 	selectionSort(a, n);
+	// } else if (algorithm == "insertion-sort") {
+	// 	insertionSort(a, n);
+	// } else if (algorithm == "binary-insertion-sort") {
+	// 	binaryInsertionSort(a, n);
+	// } else if (algorithm == "bubble-sort") {
+	// 	bubbleSort(a, n);
+	// } else if (algorithm == "shaker-sort") {
+	// 	shakerSort(a, n);
+	// } else if (algorithm == "shell-sort") {
+	// 	shellSort(a, n);
+	// } else if (algorithm == "heap-sort") {
+	// 	heapSort(a, n);
+	// } else if (algorithm == "merge-sort") {
+	// 	mergeSort(a, n);
+	// } else if (algorithm == "quick-sort") {
+	// 	quickSort(a, 0, n - 1);
+	// } else if (algorithm == "counting-sort") {
+	// 	countingSort(a, n);
+	// } else if (algorithm == "radix-sort") {
+	// 	radixSort(a, n);
+	// } else if (algorithm == "flash-sort") {
+	// 	flashSort(a, n);
+	// } else {
+    //     cerr << "Error: Unsupported sorting algorithm!\n";
+    //     return;
+    // }
+	// clock_t end = clock();
+	// double elapsedTime = getTime(start, end);
 
 	// Print result
 	cout << "-------------------------\n";
@@ -844,7 +844,7 @@ void processSorting(const string &algorithm, int a[], int n, const string &outpu
 		cout << "Comparisons: " << comparisonCount << "\n";
 	}
 
-	// delete[] temp;
+	delete[] temp;
 }
 
 void process2Sorting(const string &algorithm1, const string &algorithm2, int arr1[], int arr2[], int n, const string &outputParam) {
