@@ -690,6 +690,27 @@ double getTime(clock_t start, clock_t end) {
 	return ((double)(end - start) / CLOCKS_PER_SEC) * 1000.0;
 }
 
+int stringToInt(const string &str) {
+    int number = 0;
+    bool isNegative = false;
+    int i = 0;
+
+    if (str[0] == '-') {
+        isNegative = true;
+        i = 1; 
+    }
+
+
+    for (; i < str.length(); i++) {
+        if (str[i] < '0' || str[i] > '9') {
+            return -1; 
+        }
+        number = number * 10 + (str[i] - '0');
+    }
+
+    return isNegative ? -number : number;
+}
+
 void readFile(const string &fileName, int* &arr, int &n) {
 	ifstream fin(fileName);
 
@@ -951,7 +972,7 @@ int main(int argCount, char* argv[]) {
 				return 0;
 
 			} else {
-				int inputSize = stoi(argv[3]);
+				int inputSize = stringToInt(argv[3]);
 				string outputParam = argv[4];
 				int* arr = new int[inputSize];
 
@@ -989,11 +1010,11 @@ int main(int argCount, char* argv[]) {
 				delete[] arr;
 				return 0;
 			}
-			
+
 		} else if (argCount == 6) {
 			string algorithm = argv[2];
 			string argv3 = argv[3];
-			int inputSize = stoi(argv3);
+			int inputSize = stringToInt(argv3);
 			int* arr = new int[inputSize];
 			
 			string order = argv[4];
@@ -1062,7 +1083,7 @@ int main(int argCount, char* argv[]) {
 			string algorithm1 = argv[2];
 			string algorithm2 = argv[3];
 			string argv4 = argv[4];
-			int inputSize = stoi(argv4);
+			int inputSize = stringToInt(argv4);
 
 			string order = argv[5];
 			int orderType = 0;
