@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cmath>
 #include <time.h>
+#include <string>
 using namespace std;
 
 template <class T>
@@ -139,21 +140,46 @@ int partition(int a[], int left, int right) {
 	int pivot = right;
 	right--;
 
-	while (left <= right) {
-		while (left <= right && a[left] < a[pivot]) {
+	while (true) {
+		comparisonCount++;
+		if (left > right) {
+			break;
+		}
+
+		while (true) {
+			comparisonCount++;
+			if (left > right) {
+				break;
+			}
+
+			comparisonCount++;
+			if (a[left] >= a[pivot]) {
+				break;
+			}
 			left++;
 		}
 
-		while (left <= right && a[right] > a[pivot]) {
+		while (true) {
+			comparisonCount++;
+			if (left > right) {
+				break;
+			}
+
+			comparisonCount++;
+			if (a[right] <= a[pivot]) {
+				break;
+			}
 			right--;
 		}
 
-		if (left <= right) {
-			HoanVi(a[left], a[right]);
-
-			left++;
-			right--;
+		comparisonCount++;
+		if (left > right) {
+			break;
 		}
+
+		HoanVi(a[left], a[right]);
+		left++;
+		right--;
 	}
 
 	HoanVi(a[left], a[pivot]);
@@ -161,6 +187,7 @@ int partition(int a[], int left, int right) {
 }
 
 void quickSort(int a[], int left, int right) {
+	comparisonCount++;
 	if (left >= right) {
 		return;
 	}
@@ -177,7 +204,18 @@ void merge(int b[], int p, int c[], int q, int a[]) {
 	int j = 0;
 	int k = 0;
 
-	while (i < p && j < q) {
+	while (true) {
+		comparisonCount++;
+		if (i >= p) {
+			break;
+		}
+
+		comparisonCount++;
+		if (j >= q) {
+			break;
+		}
+
+		comparisonCount++;
 		if (b[i] <= c[j]) {
 			a[k] = b[i];
 			i++;
@@ -185,17 +223,26 @@ void merge(int b[], int p, int c[], int q, int a[]) {
 			a[k] = c[j];
 			j++;
 		}
-
 		k++;
 	}
 
-	while (i < p) {
+	while (true) {
+		comparisonCount++;
+		if (i >= p) {
+			break;
+		}
+
 		a[k] = b[i];
 		i++;
 		k++;
 	}
 
-	while (j < q) {
+	while (true) {
+		comparisonCount++;
+		if (j >= q) {
+			break;
+		}
+
 		a[k] = c[j];
 		j++;
 		k++;
@@ -203,6 +250,7 @@ void merge(int b[], int p, int c[], int q, int a[]) {
 }
 
 void mergeSort(int a[], int n) {
+	comparisonCount++;
 	if (n > 1) {
 		int mid = n / 2;
 		int p = mid;
@@ -211,12 +259,26 @@ void mergeSort(int a[], int n) {
 		int* b = new int[p];
 		int* c = new int[q];
 
-		for (int i = 0; i < p; i++) {
+		int i = 0;
+		while (true) {
+			comparisonCount++;
+			if (i >= p) {
+				break;
+			}
+
 			b[i] = a[i];
+			i++;
 		}
 
-		for (int i = 0; i < q; i++) {
-			c[i] = a[i + mid];
+		int j = 0;
+		while (true) {
+			comparisonCount++;
+			if (j >= q) {
+				break;
+			}
+
+			c[j] = a[j + mid];
+			j++;
 		}
 
 		mergeSort(b, p);
@@ -232,51 +294,67 @@ void mergeSort(int a[], int n) {
 // Selection sort algorithm
 void selectionSort(int a[], int n) {
 	for (int i = 0; i < n - 1 ; i++) {
+		comparisonCount++;
 		int min = i;
 
 		for (int j = 1 + i; j < n ; j++) {
+			comparisonCount += 2;
 			if (a[j] < a[min]) {
 				min = j;
 			}
 		}
+		comparisonCount++;
 
 		HoanVi(a[i], a[min]);
 	}
+	comparisonCount++;
 }
 
 // Counting sort algorithm
 void countingSort(int a[], int n) {
 	int maxVal = a[0];
 	for (int i = 1; i < n; i++) {
+		comparisonCount += 2;
 		if (a[i] > maxVal) {
 			maxVal = a[i];
 		}
 	}
+	comparisonCount++;
 
 	int size = maxVal + 1;
 	int* output = new int[n];
 	int* count = new int[size];
 
 	for (int i = 0; i < size; i++) {
+		comparisonCount++;
 		count[i] = 0;
 	}
+	comparisonCount++;
 
 	for (int i = 0; i < n; i++) {
+		comparisonCount++;
 		count[a[i]]++;
 	}
+	comparisonCount++;
 
 	for (int i = 1; i < size; i++) {
+		comparisonCount++;
 		count[i] += count[i - 1];
 	}
+	comparisonCount++;
 
 	for (int i = n - 1; i >= 0; i--) {
+		comparisonCount++;
 		output[count[a[i]] - 1] = a[i];
 		count[a[i]]--;
 	}
+	comparisonCount++;
 
 	for (int i = 0; i < n; i++) {
+		comparisonCount++;
 		a[i] = output[i];
 	}
+	comparisonCount++;
 
 	delete[] count;
 	delete[] output;
@@ -531,54 +609,491 @@ void max_heapify(int a[], int n, int i) {
 	int left = 2 * i + 1;
 	int right = 2 * i + 2;
 
-	if (left < n && a[left] > a[largest]) { // nếu con trái tồn tại và lớn hơn cha
-		largest = left; // đổi giá trị giữa cha với con
+	comparisonCount++;
+	if (left < n) { // nếu con trái tồn tại và lớn hơn cha
+		comparisonCount++;
+		if (a[left] > a[largest]) {
+			largest = left; // đổi giá trị giữa cha với con
+		}
+	}
+	
+	comparisonCount++;
+	if (right < n) { 
+		comparisonCount++;
+		if (a[right] > a[largest]) { // nếu con phải tồn tại, lớn hơn cha 
+			largest = right;
+		}
 	}
 
-	if (right < n && a[right] > a[largest]) { // nếu con phải tồn tại, lớn hơn cha 
-		largest = right;
-	}
-
-	if (largest != i) { // nếu nút cha ko phải là cha ban đầu
-		HoanVi(a[i], a[largest]);
-		max_heapify(a, n, largest);
-	}
+	comparisonCount++;
+    if (largest != i) { // nếu nút cha ko phải là cha ban đầu
+        HoanVi(a[i], a[largest]);
+        max_heapify(a, n, largest);
+    }
 }
 
-void build_maxheap(int a[100], int n) {
-	for (int i = n/2 - 1; i >= 0; i--) { //duyệt từ nút cha cuối lên gốc
+void build_maxheap(int a[], int n) {
+	for (int i = n / 2 - 1; i >= 0; i--) { //duyệt từ nút cha cuối lên gốc
 		max_heapify(a, n, i);
+		comparisonCount++;
 	}
+	comparisonCount++;
 }
 
-void heap_sort(int a[100], int n) {
+void heapSort(int a[], int n) {
 	build_maxheap(a, n); // bước 1: xây dựng max_heap
 
 	for (int i = n - 1; i > 0; i--) {
-		HoanVi(a[i], a[0]); //đưa max về cuối
+		swap(a[i], a[0]); //đưa max về cuối
 		max_heapify(a, i, 0); //gọi heapify trên phần còn lại
+		comparisonCount++;
 	}
+	comparisonCount++;
 }
 
 // shell sort algorithm
-void shell_sort(int a[100], int n) {
-	int gap = n/2;
+void shellSort(int a[], int n) {
+	int gap = n / 2;
+     
+    while (gap > 0) {
+        comparisonCount++;
+        for (int i = 0; i < n; i++) {
+            comparisonCount++;
+            int temp = a[i];
+ 
+            int j = i;
+             
+        	while (true) {
+                comparisonCount++;
+                if (j < gap) {
+                    break;
+                }
+ 
+                comparisonCount++;
+                if (a[j - gap] > temp) {
+                    a[j] = a[j - gap];
+                    j = j - gap;
+                }
+                else {
+                    break;
+                }
+            }
+            a[j] = temp;
+        }
+        comparisonCount++;
+        gap /= 2;
+    }
+    comparisonCount++;
+}
 
-	while (gap > 0) {
-		for (int i = 0; i < n; i++) {
-			int temp = a[i];
-			int j = i;
-			while (j >= gap && a[j - gap] > temp)
-			{
-				a[j] = a[j - gap];
-				j = j - gap;
+double getTime(clock_t start, clock_t end) {
+	return ((double)(end - start) / CLOCKS_PER_SEC) * 1000.0;
+}
+
+void readFile(const string &fileName, int* &arr, int &n) {
+	ifstream fin(fileName);
+
+	if (! fin) {
+		cerr << "\nError opening file! \n";
+		return;
+	}
+
+	if (! (fin >> n)) {
+		cerr << "\nError reading number of elements! \n";
+		return;
+	}
+
+	arr = new int[n];
+	for (int i = 0; i < n; i++) {
+		if (! (fin >> arr[i])) {
+			cerr << "\nError reading element at index " << i << "\n";
+			delete[] arr;
+			arr = nullptr;
+			return;
+		}
+	}
+
+	fin.close();
+}
+
+void writeOutputFile(const string &fileName, int arr[], int n) {
+	ofstream fout(fileName);
+
+	if (! fout) {
+		cerr << "\nCan't open file " << fileName << " for writing!";
+		return;
+	}
+
+	fout << n << "\n";
+
+	for (int i = 0; i < n; i++) {
+		fout << arr[i] << " ";
+	}
+
+	fout.close();
+}
+
+void processSorting(const string &algorithm, int a[], int n, const string &outputParam) {
+	// Run many times
+	comparisonCount = 0;
+	double totalTime = 0;
+	int iterations = 1000;
+
+	int* temp = new int[n];
+	
+	for (int i = 0; i < iterations; i++) {
+		for (int j = 0; j < n; j++) {
+			temp[j] = a[j];
+		}
+
+		clock_t start = clock();
+		if (algorithm == "selection-sort") {
+			selectionSort(temp, n);
+		} else if (algorithm == "insertion-sort") {
+			insertionSort(temp, n);
+		} else if (algorithm == "binary-insertion-sort") {
+			binaryInsertionSort(temp, n);
+		} else if (algorithm == "bubble-sort") {
+			bubbleSort(temp, n);
+		} else if (algorithm == "shaker-sort") {
+			shakerSort(temp, n);
+		} else if (algorithm == "shell-sort") {
+			shellSort(temp, n);
+		} else if (algorithm == "heap-sort") {
+			heapSort(temp, n);
+		} else if (algorithm == "merge-sort") {
+			mergeSort(temp, n);
+		} else if (algorithm == "quick-sort") {
+			quickSort(temp, 0, n - 1);
+		} else if (algorithm == "counting-sort") {
+			countingSort(temp, n);
+		} else if (algorithm == "radix-sort") {
+			radixSort(temp, n);
+		} else if (algorithm == "flash-sort") {
+			flashSort(temp, n);
+		} else {
+			cerr << "Error: Unsupported sorting algorithm!\n";
+			delete[] temp;
+			return;
+		}
+		clock_t end = clock();
+		totalTime += getTime(start, end);
+	}
+	double elapsedTime = totalTime / iterations;
+
+	// Run one time
+	// comparisonCount = 0;
+	// clock_t start = clock();
+	// if (algorithm == "selection-sort") {
+	// 	selectionSort(a, n);
+	// } else if (algorithm == "insertion-sort") {
+	// 	insertionSort(a, n);
+	// } else if (algorithm == "binary-insertion-sort") {
+	// 	binaryInsertionSort(a, n);
+	// } else if (algorithm == "bubble-sort") {
+	// 	bubbleSort(a, n);
+	// } else if (algorithm == "shaker-sort") {
+	// 	shakerSort(a, n);
+	// } else if (algorithm == "shell-sort") {
+	// 	shellSort(a, n);
+	// } else if (algorithm == "heap-sort") {
+	// 	heapSort(a, n);
+	// } else if (algorithm == "merge-sort") {
+	// 	mergeSort(a, n);
+	// } else if (algorithm == "quick-sort") {
+	// 	quickSort(a, 0, n - 1);
+	// } else if (algorithm == "counting-sort") {
+	// 	countingSort(a, n);
+	// } else if (algorithm == "radix-sort") {
+	// 	radixSort(a, n);
+	// } else if (algorithm == "flash-sort") {
+	// 	flashSort(a, n);
+	// } else {
+    //     cerr << "Error: Unsupported sorting algorithm!\n";
+    //     return;
+    // }
+	// clock_t end = clock();
+	// double elapsedTime = getTime(start, end);
+
+	// Print result
+	cout << "-------------------------\n";
+	if (outputParam == "-time" || outputParam == "-both") {
+		cout << "Running time: " << elapsedTime << " ms\n";
+	}
+	if (outputParam == "-comp" || outputParam == "-both") {
+		cout << "Comparisons: " << comparisonCount << "\n";
+	}
+
+	delete[] temp;
+}
+
+void process2Sorting(const string &algorithm1, const string &algorithm2, int arr1[], int arr2[], int n, const string &outputParam) {
+	long long comparisonCount1 = 0;
+	long long comparisonCount2 = 0;
+
+	comparisonCount = 0;
+	// Algorithm 1
+	clock_t start1 = clock();
+	if (algorithm1 == "selection-sort") {
+		selectionSort(arr1, n);
+	} else if (algorithm1 == "insertion-sort") {
+		insertionSort(arr1, n);
+	} else if (algorithm1 == "binary-insertion-sort") {
+		binaryInsertionSort(arr1, n);
+	} else if (algorithm1 == "bubble-sort") {
+		bubbleSort(arr1, n);
+	} else if (algorithm1 == "shaker-sort") {
+		shakerSort(arr1, n);
+	} else if (algorithm1 == "shell-sort") {
+		shellSort(arr1, n);
+	} else if (algorithm1 == "heap-sort") {
+		heapSort(arr1, n);
+	} else if (algorithm1 == "merge-sort") {
+		mergeSort(arr1, n);
+	} else if (algorithm1 == "quick-sort") {
+		quickSort(arr1, 0, n - 1);
+	} else if (algorithm1 == "counting-sort") {
+		countingSort(arr1, n);
+	} else if (algorithm1 == "radix-sort") {
+		radixSort(arr1, n);
+	} else if (algorithm1 == "flash-sort") {
+		flashSort(arr1, n);
+	} else {
+		cerr << "\nError: Unsupported sorting algorithm! \n";
+		return;
+	}
+	clock_t end1 = clock();
+	comparisonCount1 = comparisonCount;
+	double elapsedTime1 = getTime(start1, end1);
+
+	
+	comparisonCount = 0;
+	// Algorithm 2
+	clock_t start2 = clock();
+	if (algorithm2 == "selection-sort") {
+		selectionSort(arr2, n);
+	} else if (algorithm2 == "insertion-sort") {
+		insertionSort(arr2, n);
+	} else if (algorithm2 == "binary-insertion-sort") {
+		binaryInsertionSort(arr2, n);
+	} else if (algorithm2 == "bubble-sort") {
+		bubbleSort(arr2, n);
+	} else if (algorithm2 == "shaker-sort") {
+		shakerSort(arr2, n);
+	} else if (algorithm2 == "shell-sort") {
+		shellSort(arr2, n);
+	} else if (algorithm2 == "heap-sort") {
+		heapSort(arr2, n);
+	} else if (algorithm2 == "merge-sort") {
+		mergeSort(arr2, n);
+	} else if (algorithm2 == "quick-sort") {
+		quickSort(arr2, 0, n - 1);
+	} else if (algorithm2 == "counting-sort") {
+		countingSort(arr2, n);
+	} else if (algorithm2 == "radix-sort") {
+		radixSort(arr2, n);
+	} else if (algorithm2 == "flash-sort") {
+		flashSort(arr2, n);
+	} else {
+		cerr << "\nError: Unsupported sorting algorithm! \n";
+		return;
+	}
+	clock_t end2 = clock();
+	comparisonCount2 = comparisonCount;
+	double elapsedTime2 = getTime(start2, end2);
+
+	// Print result
+    cout << "-------------------------\n";
+    if (outputParam == "-time" || outputParam == "-both") {
+        cout << "Running time: " << elapsedTime1 << " ms | "<< elapsedTime2 << " ms \n"; 
+    }
+    
+	if (outputParam == "-comp" || outputParam == "-both") {
+        cout << "Comparisons: " << comparisonCount1 << " | "<< comparisonCount2 << "\n";
+    }
+}
+
+int main(int argCount, char* argv[]) {
+	string mode = argv[1];
+	if (mode != "-a" && mode != "-c") {
+		cerr << "\nError: Unsupported mode! Only '-a' and '-c' are supported. \n";
+		return -1;
+	}
+
+	if (mode == "-a") {
+		if (argCount == 5) {
+			string algorithm = argv[2];
+
+			string argv3 = argv[3];
+			if (argv3.find(".txt") != string::npos) {
+				string givenInput = argv3;
+				string outputParam = argv[4];
+
+				int* arr = nullptr;
+				int n = 0;
+				readFile(givenInput, arr, n);
+
+				if (arr == nullptr) {
+					cerr << "\nCan't open file " << givenInput;
+					return -1;
+				}
+
+				// Command line 1
+				cout << "ALGORITHM MODE \n";
+				cout << "Algorithm: " << algorithm << "\n";
+				cout << "Input file: " << givenInput << "\n";
+				cout << "Input size:" << n << "\n";
+
+				processSorting(algorithm, arr, n, outputParam);
+				writeOutputFile(givenInput, arr, n);
+
+				delete[] arr;
+				return 0;
+
+			} else {
+				int inputSize = stoi(argv[3]);
+				string outputParam = argv[4];
+				int* arr = new int[inputSize];
+
+				// Command line 3
+				cout << "ALGORITHM MODE \n";
+				cout << "Input size: " << inputSize << "\n\n";
+				for (int i = 0; i < 4; i++) {
+					GenerateData(arr, inputSize, i);
+
+					cout << "Input order: ";
+					switch(i) {
+						case 0:
+						cout << "Randomize\n";
+						writeOutputFile("input_1.txt", arr, inputSize);
+						break;
+
+						case 1:
+						cout << "Sorted\n";
+						writeOutputFile("input_3.txt", arr, inputSize);
+						break;
+
+						case 2:
+						cout << "Reversed\n";
+						writeOutputFile("input_4.txt", arr, inputSize);
+						break;
+
+						case 3:
+						cout << "Nearly Sorted\n";
+						writeOutputFile("input_2.txt", arr, inputSize);
+						break;
+					}
+					processSorting(algorithm, arr, inputSize, outputParam);
+					cout << "\n";
+				}
+				delete[] arr;
+				return 0;
 			}
-			a[j] = temp;
+			
+		} else if (argCount == 6) {
+			string algorithm = argv[2];
+			string argv3 = argv[3];
+			int inputSize = stoi(argv3);
+			int* arr = new int[inputSize];
+			
+			string order = argv[4];
+			int orderType = 0;
+			string inputOrder = "";
+			if (order == "-rand") {
+				inputOrder = "Randomize";
+				orderType = 0;
+			} else if (order == "-nsorted") {
+				inputOrder = "Nearly Sorted";
+				orderType = 3;
+			} else if (order == "-sorted") {
+				inputOrder = "Sorted";
+				orderType = 1;
+			} else if (order == "-rev") {
+				inputOrder = "Reversed";
+				orderType = 2;
+			}
+			string outputParam = argv[5];
+			// Command line 2
+			cout << "ALGORITHM MODE \n";
+			cout << "Algorithm: " << algorithm << "\n";
+			cout << "Input size: " << inputSize << "\n";
+			cout << "Input order: " << inputOrder << "\n";
+			GenerateData(arr, inputSize, orderType);
+			writeOutputFile("input.txt", arr, inputSize);
+
+			processSorting(algorithm, arr, inputSize, outputParam);
+			writeOutputFile("output.txt", arr, inputSize);
+			delete[] arr;
+			return 0;
 		}
-		cout << "\n";
-		for(int i = 0; i < n; i++){
-			cout << a[i] << " ";
+
+	} else if (mode == "-c") {
+		if (argCount == 5) {
+			string algorithm1 = argv[2];
+			string algorithm2 = argv[3];
+			string givenInput = argv[4];
+			int* arr1 = nullptr;
+			int* arr2 = nullptr;
+			int n = 0;
+			readFile(givenInput, arr1, n);
+			readFile(givenInput, arr2, n);
+
+			if (arr1 == nullptr) {
+				cerr << "\nCan't open file " << givenInput;
+				return -1;
+			}
+
+			if (arr2 == nullptr) {
+				cerr << "\nCan't open file " << givenInput;
+				return -1;
+			}
+
+			// Command line 4
+			cout << "COMPARE MODE \n";
+			cout << "Algorithm: " << algorithm1 << " | " << algorithm2 << "\n";
+			cout << "Input file: " << givenInput << "\n";
+			cout << "Input size: " << n << "\n";
+			process2Sorting(algorithm1, algorithm2, arr1, arr2, n, "-both");
+			delete[] arr1;
+			delete[] arr2;
+			return 0;
+
+		} else if (argCount == 6) {
+			string algorithm1 = argv[2];
+			string algorithm2 = argv[3];
+			string argv4 = argv[4];
+			int inputSize = stoi(argv4);
+
+			string order = argv[5];
+			int orderType = 0;
+			string inputOrder = "";
+			if (order == "-rand") {
+				inputOrder = "Randomize";
+				orderType = 0;
+			} else if (order == "-nsorted") {
+				inputOrder = "Nearly Sorted";
+				orderType = 3;
+			} else if (order == "-sorted") {
+				inputOrder = "Sorted";
+				orderType = 1;
+			} else if (order == "-rev") {
+				inputOrder = "Reversed";
+				orderType = 2;
+			}
+
+			int* arr1 = new int[inputSize];
+			int* arr2 = new int[inputSize];
+			GenerateData(arr1, inputSize, orderType);
+			writeOutputFile("input.txt", arr1, inputSize);
+			GenerateData(arr2, inputSize, orderType);
+			cout<< "COMPARE MODE\n";
+            cout<< "Algorithm: " << algorithm1 << " | " << algorithm2 << "\n";
+            cout<< "Input size: " << inputSize << "\n";
+            cout<< "Input order: " << inputOrder << "\n";
+			process2Sorting(algorithm1, algorithm2, arr1, arr2, inputSize, "-both");
+			delete[] arr1;
+			delete[] arr2;
+			return 0;
 		}
-		gap /= 2;
 	}
 }
