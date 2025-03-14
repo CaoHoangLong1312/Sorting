@@ -841,7 +841,7 @@ void processSorting(const string &algorithm, int a[], int n, const string &outpu
 		cout << "Running time: " << elapsedTime << " ms\n";
 	}
 	if (outputParam == "-comp" || outputParam == "-both") {
-		cout << "Comparisons: " << comparisonCount << "\n";
+		cout << "Comparisons: " << comparisonCount << "\n\n\n";
 	}
 
 	delete[] temp;
@@ -929,7 +929,7 @@ void process2Sorting(const string &algorithm1, const string &algorithm2, int arr
     }
     
 	if (outputParam == "-comp" || outputParam == "-both") {
-        cout << "Comparisons: " << comparisonCount1 << " | "<< comparisonCount2 << "\n";
+        cout << "Comparisons: " << comparisonCount1 << " | "<< comparisonCount2 << "\n\n\n";
     }
 }
 
