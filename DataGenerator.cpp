@@ -475,68 +475,65 @@ void radixSort(int arr[], int n)
 // Flash sort algorithm
 void flashSort(int arr[], int n)
 {
-	int maxVal = arr[0], minVal = arr[0], maxIndex = 0;
-	for (int i = 1; i < n; i++)
-	{
-        comparisonCount++;
+    if (++comparisonCount && n <= 1) return;
 
-		if (arr[i] > maxVal)
-		{
-			maxVal = arr[i];
-			maxIndex = i;
-		}
-        comparisonCount++;
+    // Tìm min và max
+    int maxVal = arr[0], minVal = arr[0], maxIndex = 0;
+    for (int i = 1; ++comparisonCount && i < n; i++)
+    {
+        if (++comparisonCount && arr[i] > maxVal)
+        {
+            maxVal = arr[i];
+            maxIndex = i;
+        }
 
-		if (arr[i] < minVal)
-			minVal = arr[i];
-        comparisonCount++;
-	}
-    comparisonCount++;
-
-    comparisonCount++;
-	if (maxVal == minVal) {
-        return;
+        if (++comparisonCount && arr[i] < minVal)
+            minVal = arr[i];
     }
 
-	int m = floor(0.45 * n);  
-	int* L = new int[m]();
-	int k;
-	for (int i = 0; i < n; i++)
-	{
-        comparisonCount++;
-		k = floor((m - 1) * (arr[i] - minVal) / (maxVal - minVal));
-		L[k]++;
-	}
-    comparisonCount++;
+    // Nếu tất cả phần tử giống nhau
+    if (++comparisonCount && maxVal == minVal) return;
 
-	for (int i = 1; i < m; i++)
-	{
-        comparisonCount++;
-		L[i] += L[i - 1];  
-	}
-    comparisonCount++;
+    // bảng phân phối
+    int m = floor(0.45 * n);
+    if (m > 50000) m = 50000;
 
-	int count = 0, index = 0;
-	while (++comparisonCount && count < n)
-	{
-		k = floor((m - 1) * (arr[index] - minVal) / (maxVal - minVal));
-		while (++comparisonCount && index >= L[k])
-		{
-			k = floor((m - 1) * (arr[++index] - minVal) / (maxVal - minVal));
-		}
+    int *L = new int[m]();
+    for (int i = 0; ++comparisonCount && i < n; i++)
+    {
+        int k = floor((m - 1) * (arr[i] - minVal) / (maxVal - minVal));
+        L[k]++;
+    }
 
-		int temp = arr[index];
-		while (++comparisonCount && index < L[k])
-		{
-			k = floor((m - 1) * (temp - minVal) / (maxVal - minVal));
-			swap(temp, arr[--L[k]]);
-			count++;
-		}
-	}
+    for (int i = 1; ++comparisonCount && i < m; i++)
+    {
+        L[i] += L[i - 1];
+    }
 
-	delete[] L;
+    // Hoán vị
+    int count = 0, index = 0, maxIterations = n * 2;
+    while (++comparisonCount && count < n && maxIterations--)
+    {
+        int k = floor((m - 1) * (arr[index] - minVal) / (maxVal - minVal));
 
-    insertionSort(arr, n);
+        while (++comparisonCount && index >= L[k])
+        {
+            index++;
+            k = floor((m - 1) * (arr[index] - minVal) / (maxVal - minVal));
+        }
+
+        int temp = arr[index];
+        while (++comparisonCount && index < L[k])
+        {
+            k = floor((m - 1) * (temp - minVal) / (maxVal - minVal));
+            HoanVi(temp, arr[--L[k]]);
+            count++;
+        }
+    }
+
+    delete[] L;
+
+    insertionSort(arr,n); 
 }
 
 // Shaker sort algorithm
@@ -739,9 +736,9 @@ void writeOutputFile(const string &fileName, int arr[], int n) {
 }
 
 void processSorting(const string &algorithm, int a[], int n, const string &outputParam) {
-	// Run 10 times
+	// Run more times
 	double totalTime = 0;
-	int iterations = 10;
+	const int iterations = 5;
 	long long totalComparisonCount = 0;
 
 	int* temp = new int[n];
@@ -799,7 +796,7 @@ void processSorting(const string &algorithm, int a[], int n, const string &outpu
 	}
 	delete[] temp;
 
-	// Run one time
+	// // Run one time
 	// comparisonCount = 0;
 	// clock_t start = clock();
 	// if (algorithm == "selection-sort") {
@@ -838,7 +835,7 @@ void processSorting(const string &algorithm, int a[], int n, const string &outpu
 	// if (outputParam == "-time" || outputParam == "-both") {
 	// 	cout << "Running time: " << elapsedTime << " ms\n";
 	// }
-	//
+	
 	// if (outputParam == "-comp" || outputParam == "-both") {
 	// 	cout << "Comparisons: " << comparisonCount << "\n\n\n";
 	// }
@@ -929,13 +926,13 @@ void process2Sorting(const string &algorithm1, const string &algorithm2, int arr
     //     cout << "Comparisons: " << comparisonCount1 << " | "<< comparisonCount2 << "\n\n\n";
     // }
 	
-	// Run 10 times
+	// Run more times
 	long long comparisonCount1 = 0;
 	long long comparisonCount2 = 0;
 
 	// Algorithm 1
 	double totalTime1 = 0;
-	int iterations = 10;
+	const int iterations = 5;
 
 	int* temp = new int[n];
 	for (int i = 0; i < iterations; i++) {
@@ -1067,7 +1064,7 @@ int main(int argCount, char* argv[]) {
 				cout << "ALGORITHM MODE \n";
 				cout << "Algorithm: " << algorithm << "\n";
 				cout << "Input file: " << givenInput << "\n";
-				cout << "Input size:" << n << "\n";
+				cout << "Input size: " << n << "\n";
 				processSorting(algorithm, arr, n, outputParam);
 				writeOutputFile(givenInput, arr, n);
 
@@ -1081,6 +1078,7 @@ int main(int argCount, char* argv[]) {
 
 				// Command line 3
 				cout << "ALGORITHM MODE \n";
+				cout << "ALGORITHM: " << algorithm << "\n";
 				cout << "Input size: " << inputSize << "\n\n";
 				for (int i = 0; i < 4; i++) {
 					GenerateData(arr, inputSize, i);
@@ -1216,7 +1214,7 @@ int main(int argCount, char* argv[]) {
             cout<< "Input size: " << inputSize << "\n";
             cout<< "Input order: " << inputOrder << "\n";
 			process2Sorting(algorithm1, algorithm2, arr1, arr2, inputSize, "-both");
-			
+
 			delete[] arr1;
 			delete[] arr2;
 			return 0;
